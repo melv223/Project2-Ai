@@ -5,6 +5,12 @@
 
 using namespace std;
 
+struct a_state {
+    vector<vector<int>> cstate;
+    int heuristic_val;
+
+};
+void expand(vector<a_state>);
 
 //in order to move up we use -1 and keep the y the same
 //going down we do +1 and the same y
@@ -40,12 +46,23 @@ void print_setup(int arr[]) {
     }
     cout << endl;
 }
-int calcheruistic_val(int arr[]);
+int calcheruistic_val(vector<vector<int>>);
 
 int main() {
     //the zero represents the space
     vector<vector<int>> board = {{1,0,2}, {3,4,8},{7,6,5}};
+    struct a_state nstate;
+    nstate.cstate = board;
+
+    //
+    a_state sarray[1] = {nstate};
+
+
+    // find the zeroes in the board
     auto [x,y] = findzero(board);
+
+
+
     cout << x << " " << y << endl;
     cout << board[1][1] << endl;
     // print_setup(arr);
@@ -54,13 +71,40 @@ int main() {
     return 0;
 }
 
-int calcheruistic_val(int arr[]) {
+void expand(vector<a_state>& statearr, vector<vector<int>> currstate) {
+    auto [x,y] = findzero(currstate);
+    struct a_state holderstate;
+    for(int i = 0; i < 4; i++) {
+        int newx = x + movex[i];
+        int newy = y + movey[i];
+
+        if(newx >= 0 && newx < 3 && newy >= 0 && newy < 3) {
+            vector<vector<int>> newBoard = currstate;
+            swap(newBoard[x][y], newBoard[newx][newy]);
+            holderstate.cstate = newBoard;
+            holderstate.heuristic_val = calcheruistic_val(newBoard);
+            statearr.push_back(holderstate);
+        }
+
+    }
+
+
+
+
+}
+
+
+int calcheruistic_val(vector<vector<int>>) {
     // here we are going to calculate the straight line heruistic
 
     // maybe we can sort the array
     for(int i = 0; i < 9; i++) {
 
     }
+
+    struct a_state curr;
+    curr.cstate = board;
+    cout << "States have been copied over: "<< curr.cstate[0][0] << endl;
     return 0;
 }
 
